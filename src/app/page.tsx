@@ -71,6 +71,37 @@ export default function Home() {
           </div>
         </div>
       </div>
+      {/* THIRD SECTION */}
+      <div className="flex lg:flex-row flex-col relative gap-10 w-full mx-auto max-w-360 justify-between">
+        <div className="sticky top-15 h-fit  w-full lg:w-155 shrink-0">
+          <h1 className="text-[64px] text-[#1A1A1A] font-semibold leading-16">
+            Everything <br /> You Need  <br /> to <span className="text-[#C42026]">Build Faster</span>
+          </h1>
+        </div>
+        <div className="flex flex-col w-full gap-16 flex-1">
+          <div className="flex flex-col relative justify-start items-center border border-[#EBEBEB] p-8 gap-4 w-full h-80 rounded-3xl hover:shadow-xl">
+            <Image alt="ic-rocket" width={100} height={100} className="w-10" src="/assets/ic-rocket.svg" />
+            <span className="text-center text-2xl font-semibold text-[#1A1A1A]">Save Time, Ship Faster</span>
+            <p className="text-center text-base text-[#666666]">Skip repetitive setup work. <br />
+              Our templates help you launch projects in hours, not days.</p>
+            <Image alt="ic-rocket" width={100} height={100} className="w-full absolute bottom-0" src="/assets/ic-waving.svg" />
+          </div>
+          <div className="flex flex-col relative justify-start items-center border border-[#EBEBEB] p-8 gap-4 w-full h-80 rounded-3xl hover:shadow-xl">
+            <Image alt="ic-rocket" width={100} height={100} className="w-10" src="/assets/ic-magic.svg" />
+            <span className="text-center text-2xl font-semibold text-[#1A1A1A]">Easy to Customize</span>
+            <p className="text-center text-base text-[#666666]">Skip repetitive setup work. <br />
+              Our templates help you launch projects in hours, not days.</p>
+            <Image alt="ic-rocket" width={100} height={100} className="w-full absolute bottom-0" src="/assets/ic-waving.svg" />
+          </div>
+          <div className="flex flex-col relative justify-start items-center border border-[#EBEBEB] p-8 gap-4 w-full h-80 rounded-3xl hover:shadow-xl">
+            <Image alt="ic-rocket" width={100} height={100} className="w-10" src="/assets/ic-rocket.svg" />
+            <span className="text-center text-2xl font-semibold text-[#1A1A1A]">Save Time, Ship Faster</span>
+            <p className="text-center text-base text-[#666666]">Skip repetitive setup work. <br />
+              Our templates help you launch projects in hours, not days.</p>
+            <Image alt="ic-rocket" width={100} height={100} className="w-full absolute bottom-0" src="/assets/ic-waving.svg" />
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
