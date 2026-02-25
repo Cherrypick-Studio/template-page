@@ -1,10 +1,43 @@
 import Image from "next/image";
-import { Button } from "@radix-ui/themes";
 import { IoArrowForward, IoCheckmarkDone } from "react-icons/io5";
 import { BsFillPatchCheckFill } from "react-icons/bs";
 import FeatureCard from "@/components/Card/FeatureCard";
+import LaunchBanner from "@/components/Banner/LaunchBanner";
+import Button from "@/components/Elements/Button";
+import Accordion from "@/components/Elements/Accordion";
+import { cn } from "../../lib/utils";
+import TemplateCard from "@/components/Card/TemplateCard";
+import FeedbackSection from "@/components/Section/FeedbackSection";
+import BuildingBanner from "@/components/Banner/BuildingBanner";
 
 export default function Home() {
+  const templateUI = [
+    {
+      img: '/assets/ic-figma.svg',
+      title: 'UI Kit'
+    },
+    {
+      img: '/assets/ic-framer.svg',
+      title: 'Framer'
+    },
+    {
+      img: '/assets/ic-code.svg',
+      title: 'Code'
+    },
+    {
+      img: '/assets/ic-library.svg',
+      title: 'Bundling'
+    },
+    {
+      img: '/assets/ic-ebook.svg',
+      title: 'E-book'
+    },
+    {
+      img: '/assets/ic-webflow.svg',
+      title: 'Webflow',
+      coming_soon: true
+    }
+  ]
   return (
     <div className="flex flex-col min-h-screen items-center">
       <div className="flex w-full max-w-360 lg:flex-row flex-col items-center justify-between gap-20 pt-20 px-2 lg:pt-30 bg-white sm:items-start">
@@ -26,11 +59,11 @@ export default function Home() {
             </div>
           </div>
           <div className="flex gap-6">
-            <Button size="3" className="flex bg-[#1A1A1A]! rounded-full!">
+            <Button variant="primary">
               Browse Templates
               <IoArrowForward />
             </Button>
-            <Button size="3" className="flex border! border-[#999999]! text-[#1A1A1A]! bg-[#FEFEFE]! rounded-full!">
+            <Button variant="outline">
               Latest Templates
               <IoArrowForward />
             </Button>
@@ -53,7 +86,7 @@ export default function Home() {
               <BsFillPatchCheckFill size={20} color="#249B00" />
               <h4 className="text-[28px] lg:text-[32px] text-[#1A1A1A] font-semibold">Featured Templates</h4>
             </div>
-            <Button size="3" className="flex border! border-[#999999]! text-[#1A1A1A]! bg-[#FEFEFE]! rounded-full!">
+            <Button variant="outline" className="whitespace-nowrap">
               Explore all featured
               <IoArrowForward />
             </Button>
@@ -101,6 +134,102 @@ export default function Home() {
             <Image alt="ic-rocket" width={100} height={100} className="w-full absolute bottom-0" src="/assets/ic-waving.svg" />
           </div>
         </div>
+      </div>
+      {/* BANNER LAUNCH */}
+      <div className="p-8 w-full">
+        <LaunchBanner />
+      </div>
+      {/* Template Category */}
+      <div className="flex flex-col relative gap-10 w-full mx-auto max-w-360">
+        <h2 className="text-[32px] text-[#1A1A1A] font-semibold">Our Templates Category</h2>
+        <div className="flex lg:flex-row flex-col w-full gap-10">
+          {templateUI.map((list, index) => (
+            <div key={index} className={
+              cn(
+                "flex flex-col gap-4 relative justify-center items-center py-8 px-4 bg-[#FEFEFE] border border-[#DDDDDD] rounded-3xl w-full",
+                {
+                  'bg-[#F5F5F5]': list.coming_soon
+                }
+              )
+            }>
+              {
+                list.coming_soon && <span className="text-[#FEFEFE] text-[10px] py-1.5 px-3 bg-[#1A1A1A] rounded-full absolute -top-2">comming soon</span>
+              }
+              <Image alt={`ic-${list.title}`} width={100} height={100} className="w-20" src={list.img} />
+              <span className={
+                cn(
+                  "text-xl text-[#1A1A1A] font-bold ",
+                  {
+                    "text-[#888888]": list.coming_soon
+                  }
+                )
+              }>
+                {list.title}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+      {/* TEMPLATE SECTION */}
+      <div className="p-4 lg:p-10 w-full">
+        <div className="w-full mx-auto max-w-360 bg-[#F5F5F5] p-10 rounded-3xl flex flex-col gap-14">
+          <div className="flex lg:flex-row flex-col w-full justify-between gap-6">
+            <div className="flex gap-2 items-center w-full">
+              <h4 className="text-[28px] lg:text-[32px] text-[#1A1A1A] font-semibold">Latest Templates</h4>
+            </div>
+            <Button variant="outline" className="whitespace-nowrap">
+              Explore all latest
+              <IoArrowForward />
+            </Button>
+          </div>
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            {Array.from({ length: 8 }).map((_, index) => (
+              <TemplateCard
+                key={index}
+                img="/assets/ic-zenith.svg"
+                is_checked price={20}
+                template_icon='/assets/ic-figma.svg'
+                template_label="Figma"
+                title="Zenith - Web3 Wallet Website wkwkwkwkwkwkw" />
+            ))}
+          </div>
+        </div>
+      </div>
+      {/* FEEDBACk SECTION */}
+      <FeedbackSection />
+
+      {/* FAQ SECTION */}
+      <div className="flex flex-col gap-10 w-full mx-auto max-w-360 py-10 px-4 lg:px-0">
+        <h2 className="text-[32px] text-[#1A1A1A] font-semibold">Frequently Asked Questions</h2>
+        <Accordion
+          items={[
+            {
+              question: "What formats are the templates available in?",
+              answer: "Our templates are available in multiple formats including Figma, Framer, and coded versions (HTML/CSS, React, Next.js). Each template listing specifies which formats are included.",
+            },
+            {
+              question: "Can I use the templates for commercial projects?",
+              answer: "Yes! All our templates come with a commercial license that allows you to use them in personal and commercial projects. You can build client websites, SaaS products, and more.",
+            },
+            {
+              question: "Do I get free updates after purchasing?",
+              answer: "Absolutely. Once you purchase a template, you receive all future updates for free. We regularly improve our templates with new features, bug fixes, and design enhancements.",
+            },
+            {
+              question: "How do I customize the templates?",
+              answer: "Our templates are built with clean, well-organized code and use popular frameworks like Tailwind CSS. You can easily customize colors, fonts, layouts, and components to match your brand.",
+            },
+            {
+              question: "Is there a refund policy?",
+              answer: "We offer a 14-day refund policy. If you're not satisfied with your purchase, contact our support team and we'll process your refund promptly.",
+            },
+          ]}
+        />
+      </div>
+
+      {/* BUILDING SECTION */}
+      <div className="p-3 lg:p-0 w-full">
+        <BuildingBanner />
       </div>
     </div>
   );

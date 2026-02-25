@@ -23,7 +23,7 @@ export default function Navbar() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-zinc-200 bg-white">
-      <div className="mx-auto flex h-16 max-w-360 items-center justify-between px-6">
+      <div className="mx-auto flex h-16 max-w-360 items-center justify-between px-2">
         <Link href="/" className="text-xl font-bold tracking-tight">
           CherryPick
         </Link>
