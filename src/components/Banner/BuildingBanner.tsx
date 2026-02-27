@@ -1,4 +1,4 @@
-import Button from "@/components/Elements/Button";
+import { Button } from "@/components/ui/button";
 import MarqueeCarousel from "@/components/Elements/MarqueeCarousel";
 import { IoArrowForward } from "react-icons/io5";
 import FeatureCard from "../Card/FeatureCard";

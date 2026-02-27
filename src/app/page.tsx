@@ -3,7 +3,7 @@ import { IoArrowForward, IoCheckmarkDone } from "react-icons/io5";
 import { BsFillPatchCheckFill } from "react-icons/bs";
 import FeatureCard from "@/components/Card/FeatureCard";
 import LaunchBanner from "@/components/Banner/LaunchBanner";
-import Button from "@/components/Elements/Button";
+import { Button } from "@/components/ui/button";
 import Accordion from "@/components/Elements/Accordion";
 import { cn } from "../../lib/utils";
 import TemplateCard from "@/components/Card/TemplateCard";
@@ -59,7 +59,7 @@ export default function Home() {
             </div>
           </div>
           <div className="flex gap-6">
-            <Button variant="primary">
+            <Button variant="default">
               Browse Templates
               <IoArrowForward />
             </Button>

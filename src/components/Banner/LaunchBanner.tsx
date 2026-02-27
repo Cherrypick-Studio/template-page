@@ -1,4 +1,4 @@
-import Button from "@/components/Elements/Button";
+import { Button } from "@/components/ui/button";
 import { IoArrowForward } from "react-icons/io5";
 
 export default function LaunchBanner() {
