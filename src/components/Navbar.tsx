@@ -1,22 +1,80 @@
 "use client";
 
-import { useState } from "react";
-import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
+import { useState, useRef } from "react";
 import { ShoppingCart, ChevronDown, Menu, X } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
+import HelpDeskCard from "./Card/HelpDeskCard";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "./ui/accordion";
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+} from "./ui/popover";
 
 const templateItems = [
-  { title: "Landing Page", href: "/templates/landing-page" },
-  { title: "Portfolio", href: "/templates/portfolio" },
-  { title: "E-Commerce", href: "/templates/e-commerce" },
-  { title: "Dashboard", href: "/templates/dashboard" },
+  {
+    title: "Figma UI KIt",
+    desc: "Sleek designs and easy customization. Perfect for your next project!",
+    href: "/template/landing-page",
+    icon: "/assets/ic-figma.svg"
+  },
+  {
+    title: "Bundling Templates",
+    desc: "Check out our quick guide on bundling templates!",
+    href: "/template/landing-page",
+    icon: "/assets/ic-library.svg"
+  },
+  {
+    title: "Framer Templates",
+    desc: "Check out these awesome no-code Framer templates for your next project!",
+    href: "/template/landing-page",
+    icon: "/assets/ic-framer.svg"
+  },
+  {
+    title: "E-book",
+    desc: "Check out our quick guide on bundling templates!",
+    href: "/template/landing-page",
+    icon: "/assets/ic-ebook.svg"
+  },
+  {
+    title: "Code Templates",
+    desc: "Short and sweet tips for using code templates in HTML, React, CSS, or Tailwind.",
+    href: "/template/landing-page",
+    icon: "/assets/ic-code.svg"
+  },
+  {
+    title: "Webflow Templates",
+    desc: "Check out awesome Webflow templates,  to boost your website!",
+    href: "/template/landing-page",
+    icon: "/assets/ic-webflow-color.svg",
+    coming_soon: true
+  },
 ];
 
 const navLinks = [
-  { title: "Feature Kits", href: "/feature-kits" },
+  { title: "Feature Kits", href: "/feature" },
   { title: "Work in Progress", href: "/work-in-progress" },
   { title: "Blog & Article", href: "/blog" },
 ];
+
+const TemplateWrapper = ({ icon, title, desc, coming_soon }: { icon: string, title: string, desc: string, coming_soon?: boolean }) => (
+  <div className="flex gap-2 p-4 rounded-xl hover:bg-[#F5F5F5] items-start">
+    <Image alt={`ic-${title}`} width={40} height={40} src={icon} />
+    <div className="flex flex-col gap-2 items-start">
+      <span className="text-[#1A1A1A] text-base">{title}</span>
+      <p className="text-xs text-[#999999]">{desc}</p>
+      {coming_soon && <span className="bg-[#E4EFFF] py-1.5 px-3 w-fit rounded-full text-[10px] text-[#146EF5]">
+        Coming soon
+      </span>}
+    </div>
+  </div >
+)
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -25,12 +83,12 @@ export default function Navbar() {
     <header className="sticky top-0 z-50 border-b border-zinc-200 bg-white">
       <div className="mx-auto flex h-16 max-w-360 items-center justify-between px-2">
         <Link href="/" className="text-xl font-bold tracking-tight">
-          CherryPick
+          <Image alt="cherrypick-logo" width={100} height={100} src={'/assets/ic-logo-cherrypick.svg'} className="w-full" />
         </Link>
 
         {/* Desktop nav */}
         <nav className="hidden items-center gap-1 md:flex">
-          <TemplateDropdown />
+          <TemplatePopover />
 
           {navLinks.map((link) => (
             <Link
@@ -59,19 +117,39 @@ export default function Navbar() {
             <ShoppingCart className="size-5" />
           </Link>
           <button
-            onClick={() => setMobileOpen((prev) => !prev)}
+            onClick={() => setMobileOpen(true)}
             className="rounded-md p-2 text-zinc-700 transition-colors hover:bg-zinc-100 hover:text-zinc-900"
-            aria-label="Toggle menu"
+            aria-label="Open menu"
           >
-            {mobileOpen ? <X className="size-5" /> : <Menu className="size-5" />}
+            <Menu className="size-5" />
           </button>
         </div>
       </div>
 
-      {/* Mobile menu */}
-      {mobileOpen && (
-        <nav className="border-t border-zinc-200 bg-white px-6 pb-4 md:hidden">
-          <MobileTemplateDropdown />
+      {/* Mobile drawer – full height */}
+      <div
+        className={`fixed inset-0 z-40 bg-black/50 transition-opacity duration-300 md:hidden ${mobileOpen ? "opacity-100" : "pointer-events-none opacity-0"}`}
+        onClick={() => setMobileOpen(false)}
+      />
+      <div
+        className={`fixed inset-y-0 right-0 z-50 flex w-full flex-col bg-white transition-transform duration-300 md:hidden ${mobileOpen ? "translate-x-0" : "translate-x-full"}`}
+      >
+        <div className="flex h-16 items-center justify-between border-b border-zinc-200 px-4">
+          <Link href="/" onClick={() => setMobileOpen(false)} className="text-xl font-bold tracking-tight">
+            <Image alt="cherrypick-logo" width={100} height={100} src={'/assets/ic-logo-cherrypick.svg'} className="w-full" />
+          </Link>
+          <button
+            onClick={() => setMobileOpen(false)}
+            className="rounded-md p-2 text-zinc-700 transition-colors hover:bg-zinc-100 hover:text-zinc-900"
+            aria-label="Close menu"
+          >
+            <X className="size-5" />
+          </button>
+        </div>
+
+        <nav className="flex-1 overflow-y-auto px-4 py-4 flex flex-col justify-between">
+          <div className="flex flex-col">
+            <MobileTemplateAccordion onClose={() => setMobileOpen(false)} />
 
           {navLinks.map((link) => (
             <Link
@@ -83,77 +161,98 @@ export default function Navbar() {
               {link.title}
             </Link>
           ))}
+          </div>
+
+          <HelpDeskCard />
         </nav>
-      )}
+      </div>
     </header>
   );
 }
 
-function TemplateDropdown() {
-  return (
-    <DropdownMenu.Root>
-      <DropdownMenu.Trigger asChild>
-        <button className="flex items-center gap-1 rounded-md px-3 py-2 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-100 hover:text-zinc-900 data-[state=open]:bg-zinc-100">
-          Template
-          <ChevronDown
-            className="relative top-px size-3 transition-transform duration-200 [[data-state=open]>&]:rotate-180"
-            aria-hidden
-          />
-        </button>
-      </DropdownMenu.Trigger>
+/* ── Desktop: hover popover, click navigates to /template ── */
+function TemplatePopover() {
+  const [open, setOpen] = useState(false);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-      <DropdownMenu.Portal>
-        <DropdownMenu.Content
-          sideOffset={8}
-          className="z-50 w-48 rounded-md border border-zinc-200 bg-white p-1 shadow-lg"
+  const show = () => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    setOpen(true);
+  };
+
+  const hide = () => {
+    timeoutRef.current = setTimeout(() => setOpen(false), 150);
+  };
+
+  return (
+    <Popover open={open} onOpenChange={setOpen}>
+      <div onMouseEnter={show} onMouseLeave={hide}>
+        <PopoverTrigger asChild>
+          <Link
+            href="/template"
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
+            className="flex items-center gap-1 rounded-md px-3 py-2 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-100 hover:text-zinc-900"
+          >
+            Template
+            <ChevronDown
+              className={`relative top-px size-3 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+              aria-hidden
+            />
+          </Link>
+        </PopoverTrigger>
+
+        <PopoverContent
+          sideOffset={20}
+          align="start"
+          onMouseEnter={show}
+          onMouseLeave={hide}
+          onOpenAutoFocus={(e) => e.preventDefault()}
+          className="flex w-fit max-w-294 items-start gap-2 rounded-md border border-zinc-200 bg-white p-6 shadow-lg"
         >
-          {templateItems.map((item) => (
-            <DropdownMenu.Item key={item.href} asChild>
-              <Link
-                href={item.href}
-                className="block rounded-sm px-3 py-2 text-sm text-zinc-700 outline-none transition-colors hover:bg-zinc-100 data-highlighted:bg-zinc-100"
-              >
-                {item.title}
+          <div className="grid grid-cols-2 gap-x-10 gap-y-2">
+            {templateItems.map((item) => (
+              <Link key={item.title} href={item.href} className="outline-none">
+                <TemplateWrapper
+                  icon={item.icon}
+                  desc={item.desc}
+                  title={item.title}
+                  coming_soon={item.coming_soon}
+                />
               </Link>
-            </DropdownMenu.Item>
-          ))}
-        </DropdownMenu.Content>
-      </DropdownMenu.Portal>
-    </DropdownMenu.Root>
+            ))}
+          </div>
+          <HelpDeskCard />
+        </PopoverContent>
+      </div>
+    </Popover>
   );
 }
 
-function MobileTemplateDropdown() {
+/* ── Mobile: accordion showing all template items ── */
+function MobileTemplateAccordion({ onClose }: { onClose: () => void }) {
   return (
-    <DropdownMenu.Root>
-      <DropdownMenu.Trigger asChild>
-        <button className="flex w-full items-center gap-1 rounded-md px-3 py-2 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-100 hover:text-zinc-900 data-[state=open]:bg-zinc-100">
+    <Accordion type="single" collapsible className="border-b-0">
+      <AccordionItem value="template" className="border-b-0">
+        <AccordionTrigger className="px-3 py-2 text-sm font-medium text-zinc-700 hover:no-underline">
           Template
-          <ChevronDown
-            className="relative top-px size-3 transition-transform duration-200 [[data-state=open]>&]:rotate-180"
-            aria-hidden
-          />
-        </button>
-      </DropdownMenu.Trigger>
-
-      <DropdownMenu.Portal>
-        <DropdownMenu.Content
-          sideOffset={4}
-          align="start"
-          className="z-50 w-48 rounded-md border border-zinc-200 bg-white p-1 shadow-lg"
-        >
-          {templateItems.map((item) => (
-            <DropdownMenu.Item key={item.href} asChild>
-              <Link
-                href={item.href}
-                className="block rounded-sm px-3 py-2 text-sm text-zinc-700 outline-none transition-colors hover:bg-zinc-100 data-highlighted:bg-zinc-100"
-              >
-                {item.title}
+        </AccordionTrigger>
+        <AccordionContent className="pb-0">
+          <div className="flex flex-col gap-1">
+            {templateItems.map((item) => (
+              <Link key={item.title} href={item.href} onClick={onClose} className="outline-none">
+                <TemplateWrapper
+                  icon={item.icon}
+                  desc={item.desc}
+                  title={item.title}
+                  coming_soon={item.coming_soon}
+                />
               </Link>
-            </DropdownMenu.Item>
-          ))}
-        </DropdownMenu.Content>
-      </DropdownMenu.Portal>
-    </DropdownMenu.Root>
+            ))}
+          </div>
+        </AccordionContent>
+      </AccordionItem>
+    </Accordion>
   );
 }
