@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 interface IPropsTemplateCard {
     img: string
@@ -16,7 +17,7 @@ export default function TemplateCard({
     title = 'Zenith - Web3 Wallet Website wkwkwkwkwkwkw'
 }: IPropsTemplateCard) {
     return (
-        <div className="flex flex-col gap-4">
+        <Link href="/template/detail" className="flex flex-col gap-4">
             <Image src={img} alt="img-product" width={100} height={100} className="w-full rounded-2xl" />
             <div className="flex overflow-hidden">
                 <span className="flex-1 min-w-0 truncate">{title}</span>
@@ -32,6 +33,6 @@ export default function TemplateCard({
                     <span>{price}</span>
                 </div>
             </div>
-        </div>
+        </Link>
     )
 }
