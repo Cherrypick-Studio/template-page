@@ -9,8 +9,17 @@ import { Button } from "@/components/ui/button";
 import { IoArrowForward } from "react-icons/io5";
 import TemplateCard from "@/components/Card/TemplateCard";
 
+const TEMPLATE_IMAGES = [
+    { src: "/assets/ic-zenith.svg", alt: "Zenith - Main Preview" },
+    { src: "/assets/ic-blockwave.svg", alt: "Zenith - Blockwave Section" },
+    { src: "/assets/ic-paynexa.svg", alt: "Zenith - Paynexa Section" },
+    { src: "/assets/ic-timber.svg", alt: "Zenith - Timber Section" },
+    { src: "/assets/ic-spoty.svg", alt: "Zenith - Spoty Section" },
+];
+
 export default function TemplateDetailPage() {
     const [previewOpen, setPreviewOpen] = useState(false);
+    const [activeImageIndex, setActiveImageIndex] = useState(0);
 
     return (
         <div className="w-full">
@@ -29,23 +38,43 @@ export default function TemplateDetailPage() {
                         </div>
                     </div>
 
-                    {/* Image */}
-                    <div className="flex flex-col gap-2">
+                    {/* Image Gallery */}
+                    <div className="flex flex-col gap-3">
                         <div
                             className="relative w-full cursor-pointer overflow-hidden rounded-2xl"
                             onClick={() => setPreviewOpen(true)}
                         >
                             <Image
-                                src="/assets/ic-zenith.svg"
-                                alt="Zenith Template Preview"
+                                src={TEMPLATE_IMAGES[activeImageIndex].src}
+                                alt={TEMPLATE_IMAGES[activeImageIndex].alt}
                                 width={800}
                                 height={500}
                                 className="w-full rounded-2xl hover:scale-105 transition-transform duration-300"
                             />
                         </div>
-                        <span className="text-sm text-[#6B6B6B]">
-                            Click image to preview full size
-                        </span>
+                        {/* Thumbnail footnotes */}
+                        <div className="overflow-x-auto pb-1">
+                            <div className="flex gap-4 lg:gap-8 w-fit mx-auto">
+                                {TEMPLATE_IMAGES.map((img, index) => (
+                                    <button
+                                        key={index}
+                                        onClick={() => setActiveImageIndex(index)}
+                                        className={`shrink-0 rounded-xl overflow-hidden border-2 transition-all ${index === activeImageIndex
+                                            ? "border-[#007FFF] opacity-100"
+                                            : "border-transparent opacity-60 hover:opacity-100"
+                                            }`}
+                                    >
+                                        <Image
+                                            src={img.src}
+                                            alt={img.alt}
+                                            width={120}
+                                            height={80}
+                                            className="w-20 h-16 lg:w-40 lg:h-30 object-cover"
+                                        />
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
                     </div>
 
                     {/* Description */}
@@ -100,8 +129,9 @@ export default function TemplateDetailPage() {
             </div>
             {/* Image Preview Modal */}
             <ImagePreview
-                src="/assets/ic-zenith.svg"
-                alt="Zenith Template Preview"
+                images={TEMPLATE_IMAGES}
+                activeIndex={activeImageIndex}
+                onActiveIndexChange={setActiveImageIndex}
                 open={previewOpen}
                 onOpenChange={setPreviewOpen}
             />
