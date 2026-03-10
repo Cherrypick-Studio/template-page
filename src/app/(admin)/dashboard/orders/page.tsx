@@ -1,0 +1,117 @@
+import type { Metadata } from "next";
+import { createClient } from "@/lib/supabase/server";
+import { ShoppingBag } from "lucide-react";
+import type { Order } from "@/lib/supabase/types";
+
+type OrderWithRelations = Order & {
+  templates: { title: string; slug: string } | null;
+  profiles: { full_name: string | null } | null;
+};
+
+export const metadata: Metadata = { title: "Orders" };
+
+const statusConfig = {
+  pending: { label: "Pending", className: "bg-yellow-100 text-yellow-700" },
+  completed: { label: "Completed", className: "bg-green-100 text-green-700" },
+  refunded: { label: "Refunded", className: "bg-gray-100 text-gray-600" },
+  cancelled: { label: "Cancelled", className: "bg-red-100 text-red-700" },
+} as const;
+
+export default async function OrdersPage() {
+  const supabase = await createClient();
+
+  const { data: ordersRaw } = await supabase
+    .from("orders")
+    .select("*, templates(title, slug), profiles(full_name)")
+    .order("created_at", { ascending: false });
+
+  const orders = ordersRaw as OrderWithRelations[] | null;
+
+  return (
+    <div className="flex flex-col gap-6">
+      <div>
+        <h1 className="text-2xl font-semibold text-[#1A1A1A]">Orders</h1>
+          <p className="text-sm text-[#888888] mt-1">
+            {orders?.length ?? 0} orders total
+          </p>
+      </div>
+
+      {/* Future payment notice */}
+      <div className="flex items-start gap-3 rounded-xl border border-[#007FFF]/20 bg-[#EFF7FF] p-4">
+        <ShoppingBag className="size-5 text-[#007FFF] mt-0.5 shrink-0" />
+        <div>
+          <p className="text-sm font-medium text-[#1A1A1A]">Payment integration coming soon</p>
+          <p className="text-sm text-[#666666] mt-0.5">
+            Orders will be automatically created here once Stripe or another payment provider is integrated.
+            The database schema is already set up and ready to receive order data.
+          </p>
+        </div>
+      </div>
+
+      <div className="rounded-2xl border border-[#EBEBEB] bg-white overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-[#EBEBEB] bg-[#FAFAFA] text-left">
+                <th className="px-5 py-3 font-medium text-[#888888]">Order ID</th>
+                <th className="px-5 py-3 font-medium text-[#888888]">Template</th>
+                <th className="px-5 py-3 font-medium text-[#888888]">Customer</th>
+                <th className="px-5 py-3 font-medium text-[#888888]">Status</th>
+                <th className="px-5 py-3 font-medium text-[#888888]">Amount</th>
+                <th className="px-5 py-3 font-medium text-[#888888]">Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              {!orders || orders.length === 0 ? (
+                <tr>
+                  <td colSpan={6} className="px-5 py-16 text-center text-[#888888]">
+                    No orders yet. Orders will appear here after payment integration.
+                  </td>
+                </tr>
+              ) : (
+                orders.map((order) => {
+                  const status = order.status as keyof typeof statusConfig;
+                  const template = order.templates;
+                  const profile = order.profiles;
+                  return (
+                    <tr
+                      key={order.id}
+                      className="border-b border-[#EBEBEB] last:border-0 hover:bg-[#FAFAFA] transition-colors"
+                    >
+                      <td className="px-5 py-3 font-mono text-xs text-[#888888]">
+                        {order.id.slice(0, 8)}...
+                      </td>
+                      <td className="px-5 py-3 font-medium text-[#1A1A1A] max-w-xs truncate">
+                        {template?.title ?? "—"}
+                      </td>
+                      <td className="px-5 py-3 text-[#666666]">
+                        {profile?.full_name ?? "Guest"}
+                      </td>
+                      <td className="px-5 py-3">
+                        <span
+                          className={`rounded-full px-2.5 py-1 text-xs font-medium ${statusConfig[status]?.className ?? "bg-gray-100 text-gray-600"}`}
+                        >
+                          {statusConfig[status]?.label ?? status}
+                        </span>
+                      </td>
+                      <td className="px-5 py-3 font-medium text-[#1A1A1A]">
+                        ${order.total_amount.toFixed(2)}
+                      </td>
+                      <td className="px-5 py-3 text-[#888888]">
+                        {new Date(order.created_at).toLocaleDateString("en-US", {
+                          month: "short",
+                          day: "numeric",
+                          year: "numeric",
+                        })}
+                      </td>
+                    </tr>
+                  );
+                })
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  );
+}

@@ -19,39 +19,39 @@ import {
 
 const templateItems = [
   {
-    title: "Figma UI KIt",
+    title: "Figma UI Kit",
     desc: "Sleek designs and easy customization. Perfect for your next project!",
-    href: "/template/landing-page",
+    href: "/template?category=ui-kit",
     icon: "/assets/ic-figma.svg"
   },
   {
     title: "Bundling Templates",
-    desc: "Check out our quick guide on bundling templates!",
-    href: "/template/landing-page",
+    desc: "Save more with our curated template bundles!",
+    href: "/template?category=bundling",
     icon: "/assets/ic-library.svg"
   },
   {
     title: "Framer Templates",
-    desc: "Check out these awesome no-code Framer templates for your next project!",
-    href: "/template/landing-page",
+    desc: "Awesome no-code Framer templates for your next project!",
+    href: "/template?category=framer",
     icon: "/assets/ic-framer.svg"
   },
   {
     title: "E-book",
-    desc: "Check out our quick guide on bundling templates!",
-    href: "/template/landing-page",
+    desc: "In-depth design and development guides to level up your skills.",
+    href: "/template?category=ebook",
     icon: "/assets/ic-ebook.svg"
   },
   {
     title: "Code Templates",
-    desc: "Short and sweet tips for using code templates in HTML, React, CSS, or Tailwind.",
-    href: "/template/landing-page",
+    desc: "Production-ready components in HTML, React, and Tailwind CSS.",
+    href: "/template?category=code",
     icon: "/assets/ic-code.svg"
   },
   {
     title: "Webflow Templates",
-    desc: "Check out awesome Webflow templates,  to boost your website!",
-    href: "/template/landing-page",
+    desc: "Stunning Webflow templates to boost your website.",
+    href: "/coming-soon",
     icon: "/assets/ic-webflow-color.svg",
     coming_soon: true
   },
@@ -60,12 +60,12 @@ const templateItems = [
 const navLinks = [
   { title: "Feature Kits", href: "/feature" },
   { title: "Work in Progress", href: "/work-in-progress" },
-  { title: "Blog & Article", href: "/blog" },
+  { title: "Blog & Article", href: "/coming-soon" },
 ];
 
 const TemplateWrapper = ({ icon, title, desc, coming_soon }: { icon: string, title: string, desc: string, coming_soon?: boolean }) => (
   <div className="flex gap-2 p-4 rounded-xl hover:bg-[#F5F5F5] items-start">
-    <Image alt={`ic-${title}`} width={40} height={40} src={icon} />
+    <Image alt={`${title} icon`} width={40} height={40} src={icon} />
     <div className="flex flex-col gap-2 items-start">
       <span className="text-[#1A1A1A] text-base">{title}</span>
       <p className="text-xs text-[#999999]">{desc}</p>
@@ -83,7 +83,7 @@ export default function Navbar() {
     <header className="sticky top-0 z-50 border-b border-zinc-200 bg-white">
       <div className="mx-auto flex h-16 max-w-360 items-center justify-between px-2">
         <Link href="/" className="text-xl font-bold tracking-tight">
-          <Image alt="cherrypick-logo" width={100} height={100} src={'/assets/ic-logo-cherrypick.svg'} className="w-full" />
+          <Image alt="CherryPick logo" width={100} height={100} src={'/assets/ic-logo-cherrypick.svg'} className="w-full" />
         </Link>
 
         {/* Desktop nav */}
@@ -101,7 +101,8 @@ export default function Navbar() {
           ))}
 
           <Link
-            href="/cart"
+            href="/coming-soon"
+            aria-label="Cart — coming soon"
             className="relative ml-2 rounded-md p-2 text-zinc-700 transition-colors hover:bg-zinc-100 hover:text-zinc-900"
           >
             <ShoppingCart className="size-5" />
@@ -111,7 +112,8 @@ export default function Navbar() {
         {/* Mobile icons */}
         <div className="flex items-center gap-2 md:hidden">
           <Link
-            href="/cart"
+            href="/coming-soon"
+            aria-label="Cart — coming soon"
             className="rounded-md p-2 text-zinc-700 transition-colors hover:bg-zinc-100 hover:text-zinc-900"
           >
             <ShoppingCart className="size-5" />
@@ -136,7 +138,7 @@ export default function Navbar() {
       >
         <div className="flex h-16 items-center justify-between border-b border-zinc-200 px-4">
           <Link href="/" onClick={() => setMobileOpen(false)} className="text-xl font-bold tracking-tight">
-            <Image alt="cherrypick-logo" width={100} height={100} src={'/assets/ic-logo-cherrypick.svg'} className="w-full" />
+            <Image alt="CherryPick logo" width={100} height={100} src={'/assets/ic-logo-cherrypick.svg'} className="w-full" />
           </Link>
           <button
             onClick={() => setMobileOpen(false)}

@@ -35,7 +35,7 @@ export default function BuildingBanner() {
                         is_checked price={20}
                         template_icon='/assets/ic-figma.svg'
                         template_label="Figma"
-                        title="Zenith - Web3 Wallet Website wkwkwkwkwkwkw"
+                        title="Zenith - Web3 Wallet Website"
                         showFeature={false}
                         whiteContent />
                 ))}
