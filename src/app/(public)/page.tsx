@@ -106,7 +106,7 @@ export default async function Home() {
 
       <div className="flex flex-col min-h-screen items-center">
         {/* HERO */}
-        <section aria-label="Hero" className="flex w-full max-w-360 lg:flex-row flex-col items-center justify-between gap-20 pt-20 px-2 lg:pt-30 bg-white sm:items-start">
+        <section aria-label="Hero" className="flex w-full max-w-360 xl:flex-row flex-col items-center justify-between gap-20 pt-20 px-2 lg:pt-30 lg:px-10 bg-white sm:items-start">
           <div className="flex flex-col gap-12">
             <div className="flex flex-col gap-6">
               <h1 className="text-[64px] text-[#1A1A1A] font-semibold leading-16">
@@ -203,8 +203,8 @@ export default async function Home() {
         </section>
 
         {/* WHY CHERRYPICK */}
-        <section aria-label="Why CherryPick" className="flex lg:flex-row flex-col relative gap-10 w-full mx-auto max-w-360 justify-between">
-          <div className="sticky top-15 h-fit w-full lg:w-155 shrink-0">
+        <section aria-label="Why CherryPick" className="flex lg:flex-row flex-col px-3 lg:px-10 relative gap-10 w-full mx-auto max-w-360 justify-between">
+          <div className="lg:sticky lg:top-15 h-fit w-full lg:w-155 shrink-0">
             <h2 className="text-[64px] text-[#1A1A1A] font-semibold leading-16">
               Everything <br /> You Need <br /> to <span className="text-[#C42026]">Build Faster</span>
             </h2>
@@ -243,7 +243,7 @@ export default async function Home() {
         </div>
 
         {/* TEMPLATE CATEGORIES */}
-        <section aria-label="Template Categories" className="flex flex-col relative gap-10 w-full mx-auto max-w-360">
+        <section aria-label="Template Categories" className="flex flex-col relative gap-10 w-full mx-auto max-w-360 px-3 lg:px-10">
           <h2 className="text-[32px] text-[#1A1A1A] font-semibold">Our Templates Category</h2>
           <div className="flex lg:flex-row flex-col w-full gap-10">
             {(categories && categories.length > 0 ? categories : [
@@ -339,7 +339,7 @@ export default async function Home() {
         <FeedbackSection reviews={reviews ?? []} />
 
         {/* FAQ SECTION */}
-        <section aria-label="Frequently Asked Questions" className="flex flex-col gap-10 w-full mx-auto max-w-360 py-10 px-4 lg:px-0">
+        <section aria-label="Frequently Asked Questions" className="flex flex-col gap-10 w-full mx-auto max-w-360 py-10 px-3 lg:px-10">
           <h2 className="text-[32px] text-[#1A1A1A] font-semibold">Frequently Asked Questions</h2>
           <Accordion
             items={
@@ -360,7 +360,7 @@ export default async function Home() {
         </section>
 
         {/* BUILDING SECTION */}
-        <div className="p-3 lg:p-0 w-full">
+        <div className="p-3 lg:px-10 w-full">
           <BuildingBanner />
         </div>
       </div>

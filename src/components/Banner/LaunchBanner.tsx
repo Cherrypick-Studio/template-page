@@ -3,7 +3,7 @@ import { IoArrowForward } from "react-icons/io5";
 
 export default function LaunchBanner() {
     return (
-        <div className="bg-neutral-100 rounded-3xl flex flex-col p-20 gap-12 justify-center items-center w-full mx-auto max-w-360">
+        <div className="bg-neutral-100 rounded-3xl flex flex-col p-6 lg:p-20 gap-12 justify-center items-center w-full mx-auto max-w-360">
             <div className="flex flex-col gap-6">
                 <span className="text-5xl text-[#1A1A1A] text-center font-semibold">
                     Launch Your Website: <br />

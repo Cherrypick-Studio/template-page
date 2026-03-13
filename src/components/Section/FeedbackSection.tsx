@@ -25,7 +25,7 @@ export default function FeedbackSection({ reviews }: Props) {
     const [currentPage, setCurrentPage] = useState(0);
 
     return (
-        <section aria-label="Customer Reviews" className="flex flex-col gap-10 w-full mx-auto max-w-360 py-10">
+        <section aria-label="Customer Reviews" className="flex flex-col gap-10 w-full mx-auto max-w-360 py-10 px-3 lg:px-10">
             <h2 className="text-[32px] text-[#1A1A1A] font-semibold">What Our Customers Say</h2>
             <div className="overflow-hidden">
                 <div
