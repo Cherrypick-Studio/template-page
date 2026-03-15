@@ -1,0 +1,127 @@
+---
+title: "Web3 & DeFi UI Design: The Components Every Crypto Product Needs"
+slug: "web3-defi-ui-design"
+excerpt: "Web3 and DeFi products have unique UI requirements. From wallet connection flows to token swap interfaces, here are the design patterns that define great crypto product experiences."
+coverImage: "/blog/covers/default.svg"
+author: "CherryPick Team"
+publishedAt: "2025-02-28"
+tags: ["web3", "defi", "ui design", "crypto"]
+seoTitle: "Web3 & DeFi UI Design: Essential Components for Crypto Products"
+readingTime: 9
+---
+
+Building a Web3 product presents a unique design challenge: your users are simultaneously sophisticated (they understand DeFi mechanics) and skeptical (they've seen too many rug pulls). Your UI has to build trust fast, communicate complex information clearly, and handle edge cases — like failed transactions, network errors, and wallet disconnections — gracefully.
+
+Here's the essential design playbook for Web3 and DeFi products in 2025.
+
+## The Trust Problem in Web3
+
+Every Web3 product interaction involves real money. That changes the design stakes completely. A confusing button in a regular SaaS app causes frustration. A confusing button in a DeFi protocol causes financial loss.
+
+This means Web3 UI design has a higher bar:
+
+- **Every action must be reversible-or-confirmed** — destructive actions (signing transactions, approving contracts) need confirmation steps
+- **Errors must be specific and actionable** — "Transaction failed" is useless. "Insufficient gas fee — increase to 0.002 ETH" is helpful
+- **Status must always be visible** — users need to know if they're connected, what network they're on, and whether a transaction is pending
+
+## Core Components of a Web3 Product
+
+### 1. Wallet Connection Flow
+
+This is your authentication — the first interaction your user has with your product. It needs to be:
+
+- **Multi-wallet** — support MetaMask, WalletConnect, Coinbase Wallet at minimum
+- **Network-aware** — detect if the user is on the wrong network and prompt to switch
+- **Persistent** — remember the connection so users don't reconnect every session
+- **Fallback-graceful** — show a useful state for users who don't have a wallet yet
+
+### 2. Portfolio/Balance Dashboard
+
+Users need to see their holdings at a glance:
+
+- Token balances with USD equivalents
+- Price change indicators (24h, 7d)
+- Portfolio allocation (pie chart or bar breakdown)
+- Transaction history
+
+Design for both "power users" who want density and "newcomers" who need simplicity. A toggle between compact and expanded views serves both.
+
+### 3. Token Swap Interface
+
+The swap UI is often the most-used screen in a DeFi product. It needs to:
+
+- Show both tokens with their logos, names, and symbols
+- Update exchange rate in real-time
+- Display slippage tolerance with a clear explanation
+- Show estimated gas fees before confirmation
+- Handle "MAX" button behavior correctly (accounting for gas)
+
+The confirmation step before executing the swap is not optional — users need one final chance to review exactly what they're approving.
+
+### 4. Liquidity Pool Interface
+
+For protocols with liquidity provision:
+
+- APY/APR prominently displayed (with a tooltip explaining the calculation)
+- Your position vs. pool share
+- Impermanent loss indicator (often hidden — consider showing it proactively)
+- Add/remove liquidity with clear slippage settings
+
+### 5. Transaction History
+
+Every Web3 product needs a transaction log:
+
+- Transaction hash (with link to block explorer)
+- Status: pending / confirmed / failed
+- Timestamp and block number
+- Token amounts and USD value at time of transaction
+
+### 6. Network and Gas Status
+
+Show the current network prominently. Gas fees should be visible before any transaction is triggered — not just at the signing step.
+
+Consider a persistent network indicator in the navigation bar: "Ethereum Mainnet · 45 gwei" gives users context at all times.
+
+## Design Patterns Unique to Web3
+
+### Loading States for Blockchain Confirmation
+
+Unlike traditional apps where actions complete in milliseconds, blockchain transactions take 15 seconds to several minutes. Your loading states need to communicate:
+
+- The transaction has been submitted to the mempool
+- Estimated time to confirmation
+- The ability to view the transaction on a block explorer while waiting
+
+### Empty States for Wallets with No History
+
+New users or first-time users of a protocol will see empty states constantly. These are conversion opportunities — show clear next steps, not blank screens.
+
+### Error Handling for Web3-Specific Failures
+
+Traditional error handling isn't enough. You need specific handling for:
+
+- User rejected the transaction in their wallet
+- Insufficient gas
+- Slippage exceeded
+- Contract reverted
+- Network congestion causing timeout
+
+Each requires a different message and a different recovery action.
+
+## The Visual Language of Web3
+
+Successful Web3 products have developed a recognizable visual language:
+
+- **Dark mode first** — the crypto community overwhelmingly prefers dark interfaces
+- **Accent colors** — electric blue, neon green, or purple often signal "crypto product"
+- **Data density** — Web3 users are comfortable with information-dense interfaces
+- **Glassmorphism** — frosted glass effects remain popular in Web3 UI
+- **Gradient backgrounds** — cosmic, aurora-style gradients communicate "future" and "decentralized"
+
+## Get a Web3 UI Template
+
+Building the visual layer of a Web3 product from scratch takes months. CherryPick's Web3 templates — including Zenith for wallet interfaces and Blockwave for DeFi platforms — give you production-ready components purpose-built for crypto products.
+
+**[Browse Web3 Templates →](/template)**
+
+Launch your DeFi product with a UI that users will trust from the first interaction.

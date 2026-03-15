@@ -16,12 +16,12 @@ import JsonLd from "@/components/JsonLd";
 import type { TemplateListItem, Category, Review, FAQ } from "@/lib/supabase/types";
 
 export const metadata: Metadata = {
-  title: "CherryPick — Premium UI Templates for Figma & Webflow",
+  title: "CherryPick — Premium UI Kits, Templates & Design Assets",
   description:
     "Browse our curated collection of premium UI templates, Figma kits, Framer templates, and code components. Build faster with CherryPick.",
   alternates: { canonical: "/" },
   openGraph: {
-    title: "CherryPick — Premium UI Templates for Figma & Webflow",
+    title: "CherryPick — Premium UI Kits, Templates & Design Assets",
     description:
       "Browse our curated collection of premium UI templates, Figma kits, Framer templates, and code components.",
     url: "/",
@@ -70,8 +70,12 @@ export default async function Home() {
     name: "CherryPick",
     url: siteUrl,
     logo: `${siteUrl}/assets/ic-logo-cherrypick.svg`,
-    description: "A curated marketplace of premium UI templates for Figma, Webflow, Framer, and more.",
-    sameAs: [],
+    description: "A curated marketplace of premium UI templates for Figma, Framer, React, and more.",
+    sameAs: [
+      "https://twitter.com",
+      "https://linkedin.com",
+      "https://instagram.com",
+    ],
   };
 
   const websiteJsonLd = {

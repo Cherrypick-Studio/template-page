@@ -61,7 +61,7 @@ const templateItems = [
 const navLinks = [
   { title: "Feature Kits", href: "/feature" },
   { title: "Work in Progress", href: "/work-in-progress" },
-  { title: "Blog & Article", href: "/coming-soon" },
+  { title: "Blog & Article", href: "/blog" },
 ];
 
 const TemplateWrapper = ({ icon, title, desc, coming_soon }: { icon: string, title: string, desc: string, coming_soon?: boolean }) => (

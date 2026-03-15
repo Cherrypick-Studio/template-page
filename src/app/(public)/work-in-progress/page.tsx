@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   title: "Work in Progress",
   description: "Sneak peek at upcoming templates currently being crafted by the CherryPick team.",
   alternates: { canonical: "/work-in-progress" },
-  robots: { index: false, follow: true },
+  robots: { index: false, follow: false },
   twitter: {
     card: "summary_large_image",
     title: "Work in Progress | CherryPick",

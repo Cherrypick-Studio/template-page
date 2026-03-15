@@ -40,7 +40,7 @@ export default function Footer() {
               <nav aria-label="Footer links" className="flex flex-col gap-5">
                 <LinkWrapper link="/" label="Home" />
                 <LinkWrapper link="/work-in-progress" label="Roadmap" />
-                <LinkWrapper link="/coming-soon" label="Blog & Article" />
+                <LinkWrapper link="/blog" label="Blog & Article" />
                 <LinkWrapper link="/coming-soon" label="Refund Policy" />
                 <LinkWrapper link="/coming-soon" label="Privacy Policy" />
                 <LinkWrapper link="/coming-soon" label="Terms & Conditions" />
