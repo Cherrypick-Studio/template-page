@@ -14,7 +14,7 @@ const manrope = Manrope({
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://cherrypick.design";
 const gaId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
-const gscCode = process.env.NEXT_PUBLIC_GSC_VERIFICATION;
+// const gscCode = process.env.NEXT_PUBLIC_GSC_VERIFICATION;
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -43,7 +43,7 @@ export const metadata: Metadata = {
   authors: [{ name: "CherryPick" }],
   creator: "CherryPick",
   publisher: "CherryPick",
-  ...(gscCode && { verification: { google: gscCode } }),
+  // ...(gscCode && { verification: { google: gscCode } }),
   openGraph: {
     type: "website",
     locale: "en_US",
