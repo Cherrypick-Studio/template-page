@@ -1,5 +1,9 @@
+"use client";
+
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import { Loader2 } from "lucide-react";
 import { FaRegFileArchive } from "react-icons/fa";
 import { FaStar } from "react-icons/fa6";
 import { ImAttachment } from "react-icons/im";
@@ -17,6 +21,10 @@ interface IPropsDetailStickyCard {
     fileSize?: string;
     productType?: string;
     createdAt?: string;
+    variantId?: string | null;
+    onAddToCart?: () => void;
+    isAddedToCart?: boolean;
+    templateId?: string;
 }
 
 export default function DetailStickyCard({
@@ -30,10 +38,37 @@ export default function DetailStickyCard({
     fileSize,
     productType,
     createdAt,
+    variantId,
+    onAddToCart,
+    isAddedToCart = false,
+    templateId,
 }: IPropsDetailStickyCard) {
+    const [checkoutLoading, setCheckoutLoading] = useState(false);
+
     const formattedDate = createdAt
         ? new Date(createdAt).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })
         : null;
+
+    async function handleBuyNow() {
+        if (!variantId || !templateId) return;
+        setCheckoutLoading(true);
+        try {
+            const res = await fetch("/api/checkout", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ variantId, templateId }),
+            });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.error ?? "Checkout failed");
+            window.location.href = data.url;
+        } catch (err) {
+            alert(err instanceof Error ? err.message : "Checkout failed. Please try again.");
+            setCheckoutLoading(false);
+        }
+    }
+
+    const isFree = price === 0;
+    const canCheckout = Boolean(variantId) && !isFree;
 
     return (
         <div className="sticky top-20 flex flex-col gap-6 p-6 bg-white border border-[#DDDDDD] rounded-2xl">
@@ -107,11 +142,39 @@ export default function DetailStickyCard({
                 <div className="flex justify-between items-center">
                     <span className="text-sm text-[#6B6B6B]">Subtotal</span>
                     <span className="text-xl font-semibold text-[#1A1A1A]">
-                        {price === 0 ? "Free" : `$${price}`}
+                        {isFree ? "Free" : `$${price}`}
                     </span>
                 </div>
             </div>
-            <Button>Add to Cart</Button>
+
+            {/* Add to Cart */}
+            {onAddToCart && (
+                <Button
+                    variant="outline"
+                    onClick={onAddToCart}
+                    disabled={isAddedToCart}
+                >
+                    {isAddedToCart ? "Added to Cart" : "Add to Cart"}
+                </Button>
+            )}
+
+            {/* Buy Now */}
+            {canCheckout ? (
+                <Button onClick={handleBuyNow} disabled={checkoutLoading}>
+                    {checkoutLoading ? (
+                        <>
+                            <Loader2 className="size-4 animate-spin" />
+                            Redirecting...
+                        </>
+                    ) : (
+                        "Buy Now"
+                    )}
+                </Button>
+            ) : isFree ? (
+                <Button disabled>Free — No checkout needed</Button>
+            ) : (
+                <Button disabled>Checkout Unavailable</Button>
+            )}
         </div>
     );
 }

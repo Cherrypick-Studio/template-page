@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
-import { ShoppingBag } from "lucide-react";
 import type { Order } from "@/lib/supabase/types";
 
 type OrderWithRelations = Order & {
@@ -26,25 +25,32 @@ export default async function OrdersPage() {
     .order("created_at", { ascending: false });
 
   const orders = ordersRaw as OrderWithRelations[] | null;
+  const total = orders?.length ?? 0;
+  const completed = orders?.filter((o) => o.status === "completed").length ?? 0;
+  const revenue = orders
+    ?.filter((o) => o.status === "completed")
+    .reduce((sum, o) => sum + Number(o.total_amount), 0) ?? 0;
 
   return (
     <div className="flex flex-col gap-6">
       <div>
         <h1 className="text-2xl font-semibold text-[#1A1A1A]">Orders</h1>
-          <p className="text-sm text-[#888888] mt-1">
-            {orders?.length ?? 0} orders total
-          </p>
+        <p className="text-sm text-[#888888] mt-1">{total} orders total</p>
       </div>
 
-      {/* Future payment notice */}
-      <div className="flex items-start gap-3 rounded-xl border border-[#007FFF]/20 bg-[#EFF7FF] p-4">
-        <ShoppingBag className="size-5 text-[#007FFF] mt-0.5 shrink-0" />
-        <div>
-          <p className="text-sm font-medium text-[#1A1A1A]">Payment integration coming soon</p>
-          <p className="text-sm text-[#666666] mt-0.5">
-            Orders will be automatically created here once Stripe or another payment provider is integrated.
-            The database schema is already set up and ready to receive order data.
-          </p>
+      {/* Summary cards */}
+      <div className="grid grid-cols-3 gap-4">
+        <div className="rounded-2xl border border-[#EBEBEB] bg-white p-5">
+          <p className="text-sm text-[#888888]">Total Orders</p>
+          <p className="text-2xl font-semibold text-[#1A1A1A] mt-1">{total}</p>
+        </div>
+        <div className="rounded-2xl border border-[#EBEBEB] bg-white p-5">
+          <p className="text-sm text-[#888888]">Completed</p>
+          <p className="text-2xl font-semibold text-[#1A1A1A] mt-1">{completed}</p>
+        </div>
+        <div className="rounded-2xl border border-[#EBEBEB] bg-white p-5">
+          <p className="text-sm text-[#888888]">Revenue</p>
+          <p className="text-2xl font-semibold text-[#1A1A1A] mt-1">${revenue.toFixed(2)}</p>
         </div>
       </div>
 
@@ -53,7 +59,7 @@ export default async function OrdersPage() {
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-[#EBEBEB] bg-[#FAFAFA] text-left">
-                <th className="px-5 py-3 font-medium text-[#888888]">Order ID</th>
+                <th className="px-5 py-3 font-medium text-[#888888]">LS Order ID</th>
                 <th className="px-5 py-3 font-medium text-[#888888]">Template</th>
                 <th className="px-5 py-3 font-medium text-[#888888]">Customer</th>
                 <th className="px-5 py-3 font-medium text-[#888888]">Status</th>
@@ -65,7 +71,7 @@ export default async function OrdersPage() {
               {!orders || orders.length === 0 ? (
                 <tr>
                   <td colSpan={6} className="px-5 py-16 text-center text-[#888888]">
-                    No orders yet. Orders will appear here after payment integration.
+                    No orders yet. They will appear here once customers complete checkout via Lemon Squeezy.
                   </td>
                 </tr>
               ) : (
@@ -79,13 +85,15 @@ export default async function OrdersPage() {
                       className="border-b border-[#EBEBEB] last:border-0 hover:bg-[#FAFAFA] transition-colors"
                     >
                       <td className="px-5 py-3 font-mono text-xs text-[#888888]">
-                        {order.id.slice(0, 8)}...
+                        {order.lemon_squeezy_order_id
+                          ? `#${order.lemon_squeezy_order_id}`
+                          : "—"}
                       </td>
                       <td className="px-5 py-3 font-medium text-[#1A1A1A] max-w-xs truncate">
                         {template?.title ?? "—"}
                       </td>
                       <td className="px-5 py-3 text-[#666666]">
-                        {profile?.full_name ?? "Guest"}
+                        {order.customer_email ?? profile?.full_name ?? "Guest"}
                       </td>
                       <td className="px-5 py-3">
                         <span
@@ -95,7 +103,7 @@ export default async function OrdersPage() {
                         </span>
                       </td>
                       <td className="px-5 py-3 font-medium text-[#1A1A1A]">
-                        ${order.total_amount.toFixed(2)}
+                        ${Number(order.total_amount).toFixed(2)}
                       </td>
                       <td className="px-5 py-3 text-[#888888]">
                         {new Date(order.created_at).toLocaleDateString("en-US", {

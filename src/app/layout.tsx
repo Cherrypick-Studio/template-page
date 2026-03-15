@@ -3,6 +3,8 @@ import { Manrope } from "next/font/google";
 import { Theme } from "@radix-ui/themes";
 import "@radix-ui/themes/styles.css";
 import "./globals.css";
+import { CartProvider } from "@/contexts/CartContext";
+import CartSheet from "@/components/Cart/CartSheet";
 
 const manrope = Manrope({
   variable: "--font-manrope",
@@ -82,7 +84,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${manrope.variable} antialiased`}>
-        <Theme>{children}</Theme>
+        <CartProvider>
+          <Theme>{children}</Theme>
+          <CartSheet />
+        </CartProvider>
       </body>
     </html>
   );

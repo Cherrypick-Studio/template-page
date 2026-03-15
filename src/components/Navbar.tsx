@@ -5,6 +5,7 @@ import { ShoppingCart, ChevronDown, Menu, X } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import HelpDeskCard from "./Card/HelpDeskCard";
+import { useCart } from "@/contexts/CartContext";
 import {
   Accordion,
   AccordionContent,
@@ -78,6 +79,7 @@ const TemplateWrapper = ({ icon, title, desc, coming_soon }: { icon: string, tit
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { items, openCart } = useCart();
 
   return (
     <header className="sticky top-0 z-50 border-b border-zinc-200 bg-white">
@@ -100,24 +102,34 @@ export default function Navbar() {
             </Link>
           ))}
 
-          <Link
-            href="/coming-soon"
-            aria-label="Cart — coming soon"
+          <button
+            onClick={openCart}
+            aria-label={`Cart (${items.length} items)`}
             className="relative ml-2 rounded-md p-2 text-zinc-700 transition-colors hover:bg-zinc-100 hover:text-zinc-900"
           >
             <ShoppingCart className="size-5" />
-          </Link>
+            {items.length > 0 && (
+              <span className="absolute -top-0.5 -right-0.5 flex size-4 items-center justify-center rounded-full bg-[#C42026] text-[10px] font-bold text-white">
+                {items.length > 9 ? "9+" : items.length}
+              </span>
+            )}
+          </button>
         </nav>
 
         {/* Mobile icons */}
         <div className="flex items-center gap-2 md:hidden">
-          <Link
-            href="/coming-soon"
-            aria-label="Cart — coming soon"
-            className="rounded-md p-2 text-zinc-700 transition-colors hover:bg-zinc-100 hover:text-zinc-900"
+          <button
+            onClick={openCart}
+            aria-label={`Cart (${items.length} items)`}
+            className="relative rounded-md p-2 text-zinc-700 transition-colors hover:bg-zinc-100 hover:text-zinc-900"
           >
             <ShoppingCart className="size-5" />
-          </Link>
+            {items.length > 0 && (
+              <span className="absolute -top-0.5 -right-0.5 flex size-4 items-center justify-center rounded-full bg-[#C42026] text-[10px] font-bold text-white">
+                {items.length > 9 ? "9+" : items.length}
+              </span>
+            )}
+          </button>
           <button
             onClick={() => setMobileOpen(true)}
             className="rounded-md p-2 text-zinc-700 transition-colors hover:bg-zinc-100 hover:text-zinc-900"

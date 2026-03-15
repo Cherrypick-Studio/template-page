@@ -49,6 +49,7 @@ export default function TemplateForm({ categories, template, mode }: TemplateFor
   const [fileType, setFileType] = useState(template?.file_type ?? "");
   const [fileSize, setFileSize] = useState(template?.file_size ?? "");
   const [productType, setProductType] = useState(template?.product_type ?? "");
+  const [lsVariantId, setLsVariantId] = useState(template?.lemon_squeezy_variant_id ?? "");
 
   const [images, setImages] = useState<ImageItem[]>(
     template?.template_images?.map((img) => ({
@@ -137,6 +138,7 @@ export default function TemplateForm({ categories, template, mode }: TemplateFor
         file_type: fileType.trim() || null,
         file_size: fileSize.trim() || null,
         product_type: productType.trim() || null,
+        lemon_squeezy_variant_id: lsVariantId.trim() || null,
         updated_at: new Date().toISOString(),
       };
 
@@ -239,6 +241,23 @@ export default function TemplateForm({ categories, template, mode }: TemplateFor
               rows={5}
               className="rounded-lg border border-[#DDDDDD] bg-white px-3 py-2.5 text-sm text-[#1A1A1A] outline-none resize-none placeholder:text-[#AAAAAA] focus:border-[#1A1A1A] focus:ring-2 focus:ring-[#1A1A1A]/10"
             />
+          </div>
+
+          {/* Lemon Squeezy */}
+          <div className="flex flex-col gap-1.5">
+            <label className="text-sm font-medium text-[#1A1A1A]">
+              Lemon Squeezy Variant ID
+            </label>
+            <input
+              type="text"
+              value={lsVariantId}
+              onChange={(e) => setLsVariantId(e.target.value)}
+              placeholder="e.g. 123456"
+              className="h-10 rounded-lg border border-[#DDDDDD] bg-white px-3 text-sm text-[#1A1A1A] outline-none placeholder:text-[#AAAAAA] focus:border-[#1A1A1A] focus:ring-2 focus:ring-[#1A1A1A]/10"
+            />
+            <p className="text-xs text-[#888888]">
+              Found in your Lemon Squeezy dashboard under the product variant. Required for checkout.
+            </p>
           </div>
 
           {/* File Metadata */}
