@@ -11,6 +11,7 @@ import { IoArrowForward } from "react-icons/io5";
 import TemplateCard from "@/components/Card/TemplateCard";
 import type { Template } from "@/lib/supabase/types";
 import type { TemplateListItem } from "@/lib/supabase/types";
+import { useCart } from "@/contexts/CartContext";
 
 type TemplateImagePartial = {
   id: string;
@@ -35,11 +36,31 @@ export default function TemplateDetailClient({
 }: TemplateDetailClientProps) {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
+  const { addItem, isInCart, openCart } = useCart();
 
   const templateImages = images.map((img) => ({
     src: img.image_url,
     alt: img.alt_text ?? `${template.title} preview`,
   }));
+
+  const primaryImage =
+    images.find((i) => i.is_primary)?.image_url ??
+    images[0]?.image_url ??
+    "/assets/ic-zenith.svg";
+
+  function handleAddToCart() {
+    addItem({
+      id: template.id,
+      slug: template.slug,
+      title: template.title,
+      price: template.price,
+      imageUrl: primaryImage,
+      variantId: template.lemon_squeezy_variant_id ?? null,
+    });
+    openCart();
+  }
+
+  const addedToCart = isInCart(template.id);
 
   return (
     <div className="w-full">
@@ -156,6 +177,10 @@ export default function TemplateDetailClient({
             fileSize={template.file_size ?? undefined}
             productType={template.product_type ?? undefined}
             createdAt={template.created_at}
+            variantId={template.lemon_squeezy_variant_id}
+            templateId={template.id}
+            onAddToCart={handleAddToCart}
+            isAddedToCart={addedToCart}
           />
         </div>
       </div>
@@ -221,8 +246,12 @@ export default function TemplateDetailClient({
         fileSize={template.file_size ?? undefined}
         productType={template.product_type ?? undefined}
         createdAt={template.created_at}
+        variantId={template.lemon_squeezy_variant_id}
+        templateId={template.id}
+        onAddToCart={handleAddToCart}
+        isAddedToCart={addedToCart}
       />
-      <div className="h-20 lg:hidden" />
+      <div className="h-24 lg:hidden" />
     </div>
   );
 }

@@ -79,6 +79,7 @@ export type Database = {
           product_type: string | null;
           rating: number;
           sales_count: number;
+          lemon_squeezy_variant_id: string | null;
           created_at: string;
           updated_at: string;
         };
@@ -97,6 +98,7 @@ export type Database = {
           product_type?: string | null;
           rating?: number;
           sales_count?: number;
+          lemon_squeezy_variant_id?: string | null;
           created_at?: string;
           updated_at?: string;
         };
@@ -114,6 +116,7 @@ export type Database = {
           product_type?: string | null;
           rating?: number;
           sales_count?: number;
+          lemon_squeezy_variant_id?: string | null;
           updated_at?: string;
         };
         Relationships: [
@@ -229,6 +232,8 @@ export type Database = {
           template_id: string | null;
           status: "pending" | "completed" | "refunded" | "cancelled";
           total_amount: number;
+          lemon_squeezy_order_id: string | null;
+          customer_email: string | null;
           created_at: string;
         };
         Insert: {
@@ -237,11 +242,15 @@ export type Database = {
           template_id?: string | null;
           status?: "pending" | "completed" | "refunded" | "cancelled";
           total_amount: number;
+          lemon_squeezy_order_id?: string | null;
+          customer_email?: string | null;
           created_at?: string;
         };
         Update: {
           status?: "pending" | "completed" | "refunded" | "cancelled";
           total_amount?: number;
+          lemon_squeezy_order_id?: string | null;
+          customer_email?: string | null;
         };
         Relationships: [
           {

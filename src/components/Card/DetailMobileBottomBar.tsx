@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
+import { Loader2 } from "lucide-react";
 import {
     Drawer,
     DrawerContent,
@@ -27,6 +28,10 @@ interface IPropsDetailMobileBottomBar {
     fileSize?: string;
     productType?: string;
     createdAt?: string;
+    variantId?: string | null;
+    onAddToCart?: () => void;
+    isAddedToCart?: boolean;
+    templateId?: string;
 }
 
 export default function DetailMobileBottomBar({
@@ -40,25 +45,79 @@ export default function DetailMobileBottomBar({
     fileSize,
     productType,
     createdAt,
+    variantId,
+    onAddToCart,
+    isAddedToCart = false,
+    templateId,
 }: IPropsDetailMobileBottomBar) {
     const [open, setOpen] = useState(false);
+    const [checkoutLoading, setCheckoutLoading] = useState(false);
 
     const formattedDate = createdAt
         ? new Date(createdAt).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })
         : null;
+
+    const isFree = price === 0;
+    const canCheckout = Boolean(variantId) && !isFree;
+
+    async function handleBuyNow() {
+        if (!variantId || !templateId) return;
+        setCheckoutLoading(true);
+        try {
+            const res = await fetch("/api/checkout", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ variantId, templateId }),
+            });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.error ?? "Checkout failed");
+            window.location.href = data.url;
+        } catch (err) {
+            alert(err instanceof Error ? err.message : "Checkout failed. Please try again.");
+            setCheckoutLoading(false);
+        }
+    }
 
     return (
         <div className="fixed bottom-0 left-0 right-0 z-40 lg:hidden">
             <Drawer open={open} onOpenChange={setOpen}>
                 <DrawerTrigger asChild>
                     <div className="flex flex-col items-center justify-between bg-white border-t border-[#DDDDDD] px-6 py-4 shadow-[0_-4px_12px_rgba(0,0,0,0.08)]">
-                        <div className="flex w-full justify-between gap-1 mb-6">
+                        <div className="flex w-full justify-between gap-1 mb-3">
                             <span className="text-xl text-[#1A1A1A]">Subtotal</span>
                             <span className="text-xl font-semibold text-[#1A1A1A]">
-                                {price === 0 ? "Free" : `$${price}`}
+                                {isFree ? "Free" : `$${price}`}
                             </span>
                         </div>
-                        <Button className="w-full">Add to Cart</Button>
+                        <div className="flex w-full gap-2">
+                            {onAddToCart && (
+                                <Button
+                                    variant="outline"
+                                    className="flex-1"
+                                    onClick={(e) => { e.stopPropagation(); onAddToCart(); }}
+                                    disabled={isAddedToCart}
+                                >
+                                    {isAddedToCart ? "Added" : "Add to Cart"}
+                                </Button>
+                            )}
+                            {canCheckout ? (
+                                <Button
+                                    className="flex-1"
+                                    onClick={(e) => { e.stopPropagation(); handleBuyNow(); }}
+                                    disabled={checkoutLoading}
+                                >
+                                    {checkoutLoading ? (
+                                        <Loader2 className="size-4 animate-spin" />
+                                    ) : (
+                                        "Buy Now"
+                                    )}
+                                </Button>
+                            ) : (
+                                <Button className="flex-1" disabled>
+                                    {isFree ? "Free" : "Unavailable"}
+                                </Button>
+                            )}
+                        </div>
                     </div>
                 </DrawerTrigger>
                 <DrawerContent>
@@ -134,10 +193,37 @@ export default function DetailMobileBottomBar({
                         <div className="flex justify-between items-center">
                             <span className="text-sm text-[#6B6B6B]">Subtotal</span>
                             <span className="text-xl font-semibold text-[#1A1A1A]">
-                                {price === 0 ? "Free" : `$${price}`}
+                                {isFree ? "Free" : `$${price}`}
                             </span>
                         </div>
-                        <Button className="w-full">Add to Cart</Button>
+                        <div className="flex flex-col gap-2">
+                            {onAddToCart && (
+                                <Button
+                                    variant="outline"
+                                    className="w-full"
+                                    onClick={onAddToCart}
+                                    disabled={isAddedToCart}
+                                >
+                                    {isAddedToCart ? "Added to Cart" : "Add to Cart"}
+                                </Button>
+                            )}
+                            {canCheckout ? (
+                                <Button className="w-full" onClick={handleBuyNow} disabled={checkoutLoading}>
+                                    {checkoutLoading ? (
+                                        <>
+                                            <Loader2 className="size-4 animate-spin" />
+                                            Redirecting...
+                                        </>
+                                    ) : (
+                                        "Buy Now"
+                                    )}
+                                </Button>
+                            ) : (
+                                <Button className="w-full" disabled>
+                                    {isFree ? "Free — No checkout needed" : "Checkout Unavailable"}
+                                </Button>
+                            )}
+                        </div>
                     </div>
                 </DrawerContent>
             </Drawer>
