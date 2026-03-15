@@ -4,7 +4,7 @@ import Image from "next/image";
 import { getAllPosts } from "@/lib/blog";
 import JsonLd from "@/components/JsonLd";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://cherrypick.design";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://store.cherrypick.studio";
 
 export const metadata: Metadata = {
   title: "Blog & Articles — UI Design, Templates & SaaS Resources",

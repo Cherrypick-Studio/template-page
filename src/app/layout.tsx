@@ -12,7 +12,7 @@ const manrope = Manrope({
   subsets: ["latin"],
 });
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://cherrypick.design";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://store.cherrypick.studio";
 const gaId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
 // const gscCode = process.env.NEXT_PUBLIC_GSC_VERIFICATION;
 

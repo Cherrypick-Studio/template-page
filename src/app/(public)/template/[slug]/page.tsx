@@ -5,7 +5,7 @@ import TemplateDetailClient from "./TemplateDetailClient";
 import JsonLd from "@/components/JsonLd";
 import type { TemplateWithDetails, TemplateListItem } from "@/lib/supabase/types";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://cherrypick.design";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://store.cherrypick.studio";
 
 export const dynamicParams = true;
 

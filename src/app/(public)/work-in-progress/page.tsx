@@ -42,7 +42,7 @@ export default async function WorkInProgressPage() {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
     name: "Work in Progress — CherryPick",
-    url: `${process.env.NEXT_PUBLIC_SITE_URL || "https://cherrypick.design"}/work-in-progress`,
+    url: `${process.env.NEXT_PUBLIC_SITE_URL || "https://store.cherrypick.studio"}/work-in-progress`,
     description: "Upcoming templates currently being crafted by the CherryPick team.",
     ...(wipTemplates && wipTemplates.length > 0 && {
       hasPart: wipTemplates.map((t) => ({

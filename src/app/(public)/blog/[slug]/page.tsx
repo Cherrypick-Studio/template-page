@@ -6,7 +6,7 @@ import { MDXRemote } from "next-mdx-remote/rsc";
 import { getPost, getAllSlugs } from "@/lib/blog";
 import JsonLd from "@/components/JsonLd";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://cherrypick.design";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://store.cherrypick.studio";
 
 export async function generateStaticParams() {
   return getAllSlugs().map((slug) => ({ slug }));
