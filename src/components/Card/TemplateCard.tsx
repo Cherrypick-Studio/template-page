@@ -29,7 +29,7 @@ export default function TemplateCard({
                     alt={`${title} template preview`}
                     width={400}
                     height={300}
-                    className="w-full rounded-2xl group-hover:scale-105 transition-transform duration-300"
+                    className="w-full aspect-6/4 rounded-2xl group-hover:scale-105 transition-transform duration-300"
                 />
             </div>
             <div className="flex overflow-hidden">

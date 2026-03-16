@@ -29,7 +29,7 @@ export default function ImagePreview({ images, activeIndex, onActiveIndexChange,
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="max-w-5xl p-4 bg-white gap-4">
+            <DialogContent className="sm:max-w-200 p-0 bg-white gap-4">
                 <DialogTitle className="sr-only">{current.alt}</DialogTitle>
 
                 {/* Main preview image with navigation */}
@@ -47,7 +47,7 @@ export default function ImagePreview({ images, activeIndex, onActiveIndexChange,
                         alt={current.alt}
                         width={1200}
                         height={800}
-                        className="w-full h-auto rounded-lg object-contain max-h-[70vh]"
+                        className="w-full h-auto aspect-6/4 rounded-lg object-cover max-h-[70vh]"
                     />
                     {images.length > 1 && (
                         <button
@@ -61,7 +61,7 @@ export default function ImagePreview({ images, activeIndex, onActiveIndexChange,
 
                 {/* Thumbnail strip */}
                 {images.length > 1 && (
-                    <div className="flex gap-2 overflow-x-auto pb-1 justify-center">
+                    <div className="flex gap-2 overflow-x-auto p-4 justify-center">
                         {images.map((img, index) => (
                             <button
                                 key={index}

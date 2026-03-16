@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { Button } from "../ui/button";
+import Link from "next/link";
 
 export default function HelpDeskCard() {
     return (
@@ -10,7 +11,9 @@ export default function HelpDeskCard() {
                     <span className="text-[#1A1A1A] text-base font-semibold">Need Help ?</span>
                     <p className="text-xs text-[#999999]">Our team is ready to assist you anytime.</p>
                 </div>
-                <Button>Contact Us</Button>
+                <Link href={'/contact-us'}>
+                    <Button>Contact Us</Button>
+                </Link>
             </div>
         </div>
     )
