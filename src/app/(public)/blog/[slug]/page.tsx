@@ -100,10 +100,10 @@ export default async function BlogPostPage({
           <span>/</span>
           <Link href="/blog" className="hover:text-[#1A1A1A] transition-colors">Blog</Link>
           <span>/</span>
-          <span className="text-[#1A1A1A] truncate max-w-[200px]">{post.title}</span>
+          <span className="text-[#1A1A1A] truncate max-w-50">{post.title}</span>
         </nav>
 
-        <div className="max-w-3xl mx-auto">
+        <div className=" mx-auto">
           {/* Tags */}
           <div className="flex gap-2 flex-wrap mb-6">
             {post.tags.map((tag) => (
@@ -137,7 +137,7 @@ export default async function BlogPostPage({
           </div>
 
           {/* Cover Image */}
-          <div className="relative w-full aspect-[16/9] rounded-2xl overflow-hidden mb-12">
+          <div className="relative w-full aspect-16/9 rounded-2xl overflow-hidden mb-12">
             <Image
               src={post.coverImage}
               alt={post.title}
