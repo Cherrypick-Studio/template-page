@@ -107,8 +107,8 @@ export default function TemplateForm({ categories, template, mode }: TemplateFor
 
   async function uploadImage(file: File, templateId: string): Promise<string> {
     const supabase = createClient();
-    const ext = file.name.split(".").pop();
-    const path = `${templateId}/${Date.now()}.${ext}`;
+    const ext = file.name.split(".").pop() ?? "jpg";
+    const path = `${templateId}/${crypto.randomUUID()}.${ext}`;
     const { error } = await supabase.storage
       .from("template-images")
       .upload(path, file, { upsert: true });
