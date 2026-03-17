@@ -30,9 +30,9 @@ export async function POST(request: NextRequest) {
   const data = event.data as Record<string, unknown> | undefined;
   const meta = event.meta as Record<string, unknown> | undefined;
 
-  const supabase = getServiceClient();
-
   try {
+    const supabase = getServiceClient();
+
     if (eventName === "order_created") {
       const attributes = data?.attributes as Record<string, unknown> | undefined;
       const customData = meta?.custom_data as Record<string, string> | undefined;
@@ -43,37 +43,63 @@ export async function POST(request: NextRequest) {
       // LS stores amounts in cents
       const totalAmount = typeof attributes?.total === "number" ? attributes.total / 100 : 0;
 
-      await supabase.from("orders").insert({
-        template_id: templateId,
-        status: "completed",
-        total_amount: totalAmount,
-        lemon_squeezy_order_id: lsOrderId,
-        customer_email: customerEmail,
-      });
+      // Idempotency: skip if this order was already processed
+      const { data: existing } = await supabase
+        .from("orders")
+        .select("id")
+        .eq("lemon_squeezy_order_id", lsOrderId)
+        .maybeSingle();
 
-      // Increment sales_count on the template
-      if (templateId) {
-        const { data: tmpl } = await supabase
-          .from("templates")
-          .select("sales_count")
-          .eq("id", templateId)
-          .single();
+      if (!existing) {
+        const { error: insertError } = await supabase.from("orders").insert({
+          template_id: templateId,
+          status: "completed",
+          total_amount: totalAmount,
+          lemon_squeezy_order_id: lsOrderId,
+          customer_email: customerEmail,
+        });
 
-        if (tmpl) {
-          await supabase
-            .from("templates")
-            .update({ sales_count: tmpl.sales_count + 1 })
-            .eq("id", templateId);
+        if (insertError) {
+          console.error("[ls-webhook] order insert error:", insertError);
+          return NextResponse.json({ error: "Failed to save order" }, { status: 500 });
+        }
+
+        // Increment sales_count on the template using atomic RPC if available,
+        // otherwise fall back to read-modify-write
+        if (templateId) {
+          await supabase.rpc("increment_sales_count", { template_id: templateId }).then(
+            async ({ error: rpcError }) => {
+              if (rpcError) {
+                // Fallback: read-modify-write
+                const { data: tmpl } = await supabase
+                  .from("templates")
+                  .select("sales_count")
+                  .eq("id", templateId)
+                  .single();
+                if (tmpl) {
+                  await supabase
+                    .from("templates")
+                    .update({ sales_count: (tmpl.sales_count ?? 0) + 1 })
+                    .eq("id", templateId);
+                }
+              }
+            }
+          );
         }
       }
     }
 
     if (eventName === "order_refunded") {
       const lsOrderId = String(data?.id ?? "");
-      await supabase
+      const { error: updateError } = await supabase
         .from("orders")
         .update({ status: "refunded" })
         .eq("lemon_squeezy_order_id", lsOrderId);
+
+      if (updateError) {
+        console.error("[ls-webhook] refund update error:", updateError);
+        return NextResponse.json({ error: "Failed to update order" }, { status: 500 });
+      }
     }
   } catch (err) {
     console.error("[ls-webhook] error:", err);
