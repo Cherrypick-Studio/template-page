@@ -64,27 +64,19 @@ export async function POST(request: NextRequest) {
           return NextResponse.json({ error: "Failed to save order" }, { status: 500 });
         }
 
-        // Increment sales_count on the template using atomic RPC if available,
-        // otherwise fall back to read-modify-write
+        // Increment sales_count on the template
         if (templateId) {
-          await supabase.rpc("increment_sales_count", { template_id: templateId }).then(
-            async ({ error: rpcError }) => {
-              if (rpcError) {
-                // Fallback: read-modify-write
-                const { data: tmpl } = await supabase
-                  .from("templates")
-                  .select("sales_count")
-                  .eq("id", templateId)
-                  .single();
-                if (tmpl) {
-                  await supabase
-                    .from("templates")
-                    .update({ sales_count: (tmpl.sales_count ?? 0) + 1 })
-                    .eq("id", templateId);
-                }
-              }
-            }
-          );
+          const { data: tmpl } = await supabase
+            .from("templates")
+            .select("sales_count")
+            .eq("id", templateId)
+            .single();
+          if (tmpl) {
+            await supabase
+              .from("templates")
+              .update({ sales_count: (tmpl.sales_count ?? 0) + 1 })
+              .eq("id", templateId);
+          }
         }
       }
     }
