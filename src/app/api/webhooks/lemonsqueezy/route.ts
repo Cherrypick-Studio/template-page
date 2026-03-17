@@ -94,8 +94,9 @@ export async function POST(request: NextRequest) {
       }
     }
   } catch (err) {
-    console.error("[ls-webhook] error:", err);
-    return NextResponse.json({ error: "Internal error" }, { status: 500 });
+    const message = err instanceof Error ? err.message : String(err);
+    console.error("[ls-webhook] unhandled error:", message, err);
+    return NextResponse.json({ error: "Internal error", detail: message }, { status: 500 });
   }
 
   return NextResponse.json({ success: true });
